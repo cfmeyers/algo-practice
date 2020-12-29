@@ -1,3 +1,4 @@
 pytest
 ipython
 ipdb
+mypy
