@@ -1,5 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-TARGET="$1"
+# note need to use greadlink for MacOS, readlink for Linux
+SCRIPT_DIR="$(dirname "$(greadlink -f "$0")")"
+
+TARGET=$(ls "$SCRIPT_DIR"/tests | sed 's/\.py//; s/^test_//'  |fzf)
 echo "Running practice for $TARGET"
+
+source "$SCRIPT_DIR"/venv/bin/activate
+
+cp "$SCRIPT_DIR"/tests/test_${TARGET}.py ./test_run.py
+
+nvim -O run.py test_run.py
