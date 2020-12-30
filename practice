@@ -4,13 +4,23 @@ set -euo pipefail
 # note need to use greadlink for MacOS (from gnu core utils), readlink for Linux
 SCRIPT_DIR="$(dirname "$(greadlink -f "$0")")"
 
-TARGET=$(ls "$SCRIPT_DIR"/problems |fzf)
+# TARGET=$(ls "$SCRIPT_DIR"/problems |fzf)
+TARGET=$(find -L "$SCRIPT_DIR"/problems -type d \
+    | grep -v 'problems/private$' \
+    | grep -v 'problems$' \
+    | xargs -n 1 basename \
+    | fzf)
 echo "Running practice for $TARGET"
+
+PATH_TO_TARGET_DIR=$(find -L "$SCRIPT_DIR"/problems -iname "$TARGET")
 
 source "$SCRIPT_DIR"/venv/bin/activate
 
 SOURCE_NAME="run.py"
 TEST_NAME="test_run.py"
-cp "$SCRIPT_DIR"/problems/${TARGET}/$SOURCE_NAME $SOURCE_NAME
-cp "$SCRIPT_DIR"/problems/${TARGET}/$TEST_NAME $TEST_NAME
+ANSWER_NAME="answer.py"
+cp ${PATH_TO_TARGET_DIR}/$SOURCE_NAME $SOURCE_NAME
+cp ${PATH_TO_TARGET_DIR}/$TEST_NAME $TEST_NAME
+cp ${PATH_TO_TARGET_DIR}/$ANSWER_NAME $ANSWER_NAME
+
 nvim -O $SOURCE_NAME $TEST_NAME

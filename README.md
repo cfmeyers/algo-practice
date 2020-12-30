@@ -10,6 +10,8 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 ln -s $(pwd)/practice ~/bin
+ln -s $HOME/src/github.com/cfmeyers/private-algo-practice-problems/problems problems/private
+ ~/bin
 ```
 
 Usage:
