@@ -8,6 +8,7 @@ SCRIPT_DIR="$(dirname "$(greadlink -f "$0")")"
 TARGET=$(find -L "$SCRIPT_DIR"/problems -type d \
     | grep -v 'problems/private$' \
     | grep -v 'problems$' \
+    | grep -v '__pycache__' \
     | xargs -n 1 basename \
     | fzf)
 echo "Running practice for $TARGET"
